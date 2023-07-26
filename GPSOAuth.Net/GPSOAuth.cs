@@ -15,7 +15,7 @@ namespace GPSOAuth.Net
             string deviceId,
             string[] service,
             string app,
-            string client_sig)
+            string clientSig)
         {
             return new Dictionary<string, string>();
         }
