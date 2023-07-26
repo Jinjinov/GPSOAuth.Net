@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSOAuth.Net", "GPSOAuth.Net\GPSOAuth.Net.csproj", "{450CADC0-6897-4A09-BB0A-53814180328B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSOAuth.Net.Test", "GPSOAuth.Net.Test\GPSOAuth.Net.Test.csproj", "{F52867E4-8FE0-457D-811C-8C86C5886813}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{450CADC0-6897-4A09-BB0A-53814180328B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{450CADC0-6897-4A09-BB0A-53814180328B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{450CADC0-6897-4A09-BB0A-53814180328B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{450CADC0-6897-4A09-BB0A-53814180328B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F52867E4-8FE0-457D-811C-8C86C5886813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F52867E4-8FE0-457D-811C-8C86C5886813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F52867E4-8FE0-457D-811C-8C86C5886813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F52867E4-8FE0-457D-811C-8C86C5886813}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A17A2C58-7D8E-4FDA-8C2E-075357C9E68A}
+	EndGlobalSection
+EndGlobal
