@@ -28,7 +28,7 @@ namespace GPSOAuth.Net
             _password = password;
         }
 
-        private async Task<Dictionary<string, string>> PerformAuthRequest(Dictionary<string, string> data)
+        private static async Task<Dictionary<string, string>> PerformAuthRequest(Dictionary<string, string> data)
         {
             using HttpClient client = new HttpClient();
 
@@ -41,7 +41,7 @@ namespace GPSOAuth.Net
             return ParseAuthResponse(responseContent);
         }
 
-        private async static Task<Dictionary<string, string>> PerformAuthRequestAsync(Dictionary<string, string> data)
+        private static async Task<Dictionary<string, string>> PerformAuthRequestAsync(Dictionary<string, string> data)
         {
             HttpClientHandler handler = new HttpClientHandler
             {
