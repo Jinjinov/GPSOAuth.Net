@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -24,17 +26,22 @@ public class Program
 
     public static async Task Run(string email, string password)
     {
-        GPSOAuthClient client = new(email, password);
+        string deviceId = NetworkInterface
+                .GetAllNetworkInterfaces()
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                .Select(nic => nic.GetPhysicalAddress().ToString())
+                .FirstOrDefault();
 
-        Dictionary<string, string> master = await client.PerformMasterLogin();
+        GPSOAuthClient client = new();
+
+        Dictionary<string, string> master = await client.PerformMasterLogin(email, password, deviceId);
 
         Console.WriteLine("Master Login:");
         Console.WriteLine(JsonSerializer.Serialize(master, _jsonSerializerOptions));
 
         if (master.TryGetValue("Token", out string token))
         {
-            Dictionary<string, string> oath = await client.PerformOAuth(token, "sj", "com.google.android.music",
-                "38918a453d07199354f8b19af05ec6562ced5788");
+            Dictionary<string, string> oath = await client.PerformOAuth(email, token, deviceId, "sj", "com.google.android.music");
 
             Console.WriteLine("OAuth Login:");
             Console.WriteLine(JsonSerializer.Serialize(oath, _jsonSerializerOptions));
