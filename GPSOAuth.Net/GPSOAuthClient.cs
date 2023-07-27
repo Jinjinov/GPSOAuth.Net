@@ -19,20 +19,13 @@ namespace GPSOAuth.Net
             "6rmf5AAAAAwEAAQ==";
 
         private readonly RSAParameters _androidKey = KeyFromB64(B64Key);
-        private readonly string _email;
-        private readonly string _password;
-
-        public GPSOAuthClient(string email, string password)
-        {
-            _email = email;
-            _password = password;
-        }
 
         private static async Task<Dictionary<string, string>> PerformAuthRequest(Dictionary<string, string> data)
         {
             using HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/x-www-form-urlencoded");
 
             FormUrlEncodedContent content = new FormUrlEncodedContent(data);
             HttpResponseMessage response = await client.PostAsync(AuthUrl, content);
@@ -54,6 +47,7 @@ namespace GPSOAuth.Net
             using HttpClient tempHttpClient = new HttpClient(handler);
 
             tempHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
+            tempHttpClient.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
 
             //HttpResponseMessage response;
             //using (FormUrlEncodedContent formUrlEncodedContent = new FormUrlEncodedContent(data))
@@ -78,6 +72,7 @@ namespace GPSOAuth.Net
         private static Dictionary<string, string> GenerateBaseRequest(
             string email,
             string encryptedPassword,
+            string androidId,
             string service,
             string deviceCountry,
             string operatorCountry,
@@ -92,6 +87,7 @@ namespace GPSOAuth.Net
                 { "EncryptedPasswd",  encryptedPassword},
                 { "service", service },
                 { "source", "android" },
+                { "androidId", androidId },
                 { "device_country", deviceCountry },
                 { "operatorCountry", operatorCountry },
                 { "lang", lang },
@@ -100,31 +96,41 @@ namespace GPSOAuth.Net
         }
 
         public Task<Dictionary<string, string>> PerformMasterLogin(
+            string email,
+            string password,
+            string androidId,
             string service = "ac2dm",
+            string clientSig = "38918a453d07199354f8b19af05ec6562ced5788",
             string deviceCountry = "us",
             string operatorCountry = "us",
             string lang = "en",
             int sdkVersion = 21)
         {
-            string signature = CreateSignature(_email, _password, _androidKey);
+            string signature = CreateSignature(email, password, _androidKey);
 
-            Dictionary<string, string> request = GenerateBaseRequest(_email, signature, service, deviceCountry, operatorCountry, lang, sdkVersion);
+            Dictionary<string, string> request = GenerateBaseRequest(email, signature, androidId, service, deviceCountry, operatorCountry, lang, sdkVersion);
             request.Add("add_account", "1");
+
+            request.Add("client_sig", clientSig);
+            request.Add("callerSig", clientSig);
+            request.Add("droidguard_results", "dummy123");
 
             return PerformAuthRequest(request);
         }
 
         public Task<Dictionary<string, string>> PerformOAuth(
+            string email,
             string masterToken,
+            string androidId,
             string service,
             string app,
-            string clientSig,
+            string clientSig = "38918a453d07199354f8b19af05ec6562ced5788",
             string deviceCountry = "us",
             string operatorCountry = "us",
             string lang = "en",
             int sdkVersion = 21)
         {
-            Dictionary<string, string> request = GenerateBaseRequest(_email, masterToken, service, deviceCountry, operatorCountry, lang, sdkVersion);
+            Dictionary<string, string> request = GenerateBaseRequest(email, masterToken, androidId, service, deviceCountry, operatorCountry, lang, sdkVersion);
             request.Add("app", app);
             request.Add("client_sig", clientSig);
 
